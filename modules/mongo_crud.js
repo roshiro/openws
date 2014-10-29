@@ -7,12 +7,8 @@
       if (error) {
         res.send(400, error);
       } else {
-        if (req.accepts('html')) {
-          res.render('data',{objects: objs, collection: req.params.collection});
-        } else {
-          res.set('Content-Type','application/json');
-          res.send(200, objs);
-        }
+        res.set('Content-Type','application/json');
+        res.send(200, objs);
       }
     });
   };
@@ -34,6 +30,7 @@
 
   exports.create = function(req, res) {
     var object = req.body;
+    console.info("CREATE called " + object);
     var collection = req.params.collection;
     collectionDriver.save(collection, object, function(err,docs) {
       if (err) { res.send(400, err); }
@@ -42,6 +39,7 @@
   };
 
   exports.update = function(req, res) { //A
+    console.info("UPDATE called");
     var params = req.params;
     var entity = params.entity;
     var collection = params.collection;

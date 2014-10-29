@@ -1,14 +1,17 @@
-var express = require('express'),
+var http = require('http'),
+    express = require('express'),
     module = require('./modules/mongo_crud'),
-    CollectionDriver = require('./modules/collection_driver').CollectionDriver,
-    MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server
     app = express();
 
-var mongoHost = 'localHost',
+CollectionDriver = require('./modules/collection_driver').CollectionDriver;
+MongoClient = require('mongodb').MongoClient;
+Server = require('mongodb').Server;
+
+var mongoHost = 'localhost',
     mongoPort = 27017,
-    collectionDriver,
     mongoClient = new MongoClient(new Server(mongoHost, mongoPort));
+
+collectionDriver = null;
 
 mongoClient.open(function(err, mongoClient) {
   if (!mongoClient) {
@@ -17,7 +20,11 @@ mongoClient.open(function(err, mongoClient) {
   }
   var db = mongoClient.db("Openws");
   collectionDriver = new CollectionDriver(db);
+  console.info("Database connection OK");
 });
+
+app.set('port', process.env.PORT || 3000);
+app.use(express.bodyParser());
 
 app.use(express.bodyParser());
 app.get('/:collection', module.findAll);
@@ -32,4 +39,7 @@ app.delete('/:collection/:entity', module.delete);
 // app.put('/cruds/:id', module.update);
 
 app.listen(3000);
-console.log('Listening on port 3000...');
+// http.createServer(app).listen(app.get('port'), function(){
+//   console.log('Express server listening on port ' + app.get('port'));
+// });
+// console.log('Listening on port 3000...');
