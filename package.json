@@ -1,13 +1,19 @@
 {
-  "name": "crud_ws",
-  "description": "CRUD",
+  "name": "Openws",
+  "description": "Open REST CRUD web service",
   "version": "0.0.1",
   "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "express": "3.x",
     "mongodb": "1.4.x",
     "mongoose": "3.x",
     "frisby": "x",
     "jasmine-node": "x"
+  },
+  "engines": {
+    "node": "0.10.x"
   }
 }
