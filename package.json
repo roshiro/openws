@@ -7,6 +7,7 @@
     "express": "3.x",
     "mongodb": "1.4.x",
     "mongoose": "3.x",
-    "frisby": "x"
+    "frisby": "x",
+    "jasmine-node": "x"
   }
 }
