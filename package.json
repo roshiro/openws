@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test" : "jasmine-node spec/"
   },
   "dependencies": {
     "express": "3.x",

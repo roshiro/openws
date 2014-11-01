@@ -30,7 +30,6 @@
 
   exports.create = function(req, res) {
     var object = req.body;
-    console.info("CREATE called " + object);
     var collection = req.params.collection;
     collectionDriver.save(collection, object, function(err,docs) {
       if (err) { res.send(400, err); }

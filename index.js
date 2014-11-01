@@ -1,37 +1,32 @@
-CollectionDriver = require('./modules/collection_driver').CollectionDriver;
-MongoClient = require('mongodb').MongoClient;
-Server = require('mongodb').Server;
-
 var http = require('http'),
     express = require('express'),
     module = require('./modules/mongo_crud'),
     app = express(),
-    mongoHost = 'localhost',
-    mongoPort = 27017,
-    mongoClient = new MongoClient(new Server(mongoHost, mongoPort));
+    uri = process.env.MONGOLAB_URI;
 
-var uri = process.env.MONGOLAB_URI;
-// var uri = "mongodb://localhost:27017/heroku_app31135802"
+    // uri = "mongodb://localhost:27017/Openws";
+
+CollectionDriver = require('./modules/collection_driver').CollectionDriver;
+MongoClient = require('mongodb').MongoClient;
 
 // Opens connection with Mongo DB
 MongoClient.connect(uri, function(err, db) {
-  // if (!mongoClient) {
-  //   console.error("Error! Exiting... Must start MongoDB first");
-  //   process.exit(1);
-  // }
   if(err) throw err;
-  // var db = mongoClient.db("Openws");
   collectionDriver = new CollectionDriver(db);
   console.info("Database connection OK");
 });
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.bodyParser());
+app.use(function(req, res, next) {
+  // Enabling CORS
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Routes and handlers
-app.get('/', function(request, response) {
-  response.send('Openws is working')
-});
+app.get('/', function(request, response) {response.send('Openws is working')});
 app.get('/:collection', module.findAll);
 app.get('/:collection/:entity', module.get);
 app.post('/:collection', module.create);
