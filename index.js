@@ -10,7 +10,7 @@ var http = require('http'),
     mongoPort = 27017,
     mongoClient = new MongoClient(new Server(mongoHost, mongoPort));
 
-var uri = "mongodb://heroku_app31135802:heroku_app31135802@ds049150.mongolab.com:49150/heroku_app31135802"
+var uri = "mongodb://openwsapp:heroku81282180@ds049150.mongolab.com:49150/heroku_app31135802"
 // var uri = "mongodb://localhost:27017/heroku_app31135802"
 
 // Opens connection with Mongo DB
