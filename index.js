@@ -2,9 +2,9 @@ var http = require('http'),
     express = require('express'),
     module = require('./modules/mongo_crud'),
     app = express(),
-    // uri = process.env.MONGOLAB_URI;
+    uri = process.env.MONGOLAB_URI;
 
-    uri = "mongodb://localhost:27017/Openws";
+    // uri = "mongodb://localhost:27017/Openws";
 
 CollectionDriver = require('./modules/collection_driver').CollectionDriver;
 MongoClient = require('mongodb').MongoClient;
