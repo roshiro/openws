@@ -25,6 +25,18 @@ CollectionDriver.prototype.findAll = function(collectionName, callback) {
   });
 };
 
+CollectionDriver.prototype.find = function(collectionName, query, callback) {
+  this.getCollection(collectionName, function(error, the_collection) {
+    if (error) callback(error);
+    else {
+      the_collection.find(query).toArray(function(error,doc) {
+        if (error) callback(error);
+        else callback(null, doc);
+      });
+    }
+  });
+};
+
 CollectionDriver.prototype.get = function(collectionName, id, callback) {
   this.getCollection(collectionName, function(error, the_collection) {
     if (error) callback(error);

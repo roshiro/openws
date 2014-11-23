@@ -1,25 +1,47 @@
 (function() {
   var mongo = require('mongodb');
 
+  var _apiKey = function(req) {
+    return req.param("apiKey");
+  },
+
+  _getNamespace = function(req, res) {
+    var apiKey = _apiKey(req);
+    if(apiKey && apiKey.length == 0) {
+      // Error
+    }
+    return "app";
+  },
+
+  _collection = function(req, res) {
+    return _getNamespace(req, res) + "." + req.params.collection;
+  };
+
   exports.findAll = function(req, res) {
     var params = req.params;
-    collectionDriver.findAll(req.params.collection, function(error, objs) {
+    var query = req.param("q");
+    var callback = function(error, objs) {
       if (error) {
         res.send(400, error);
       } else {
         res.set('Content-Type','application/json');
         res.send(200, objs);
       }
-    });
+    };
+
+    if(query) {
+      collectionDriver.find(_collection(req,res), JSON.parse(query), callback);
+    } else {
+      collectionDriver.findAll(_collection(req,res), callback);
+    }
   };
 
   exports.get = function(req, res) {
     var params = req.params;
     var entity = params.entity;
-    var collection = params.collection;
 
     if (entity) {
-      collectionDriver.get(collection, entity, function(error, objs) {
+      collectionDriver.get(_collection(req,res), entity, function(error, objs) {
         if (error) { res.send(400, error); }
         else { res.send(200, objs); }
       });
@@ -28,10 +50,14 @@
     }
   };
 
+  exports.find = function(req, res) {
+    var query = req.param("q");
+    console.log(query);
+  },
+
   exports.create = function(req, res) {
     var object = req.body;
-    var collection = req.params.collection;
-    collectionDriver.save(collection, object, function(err,docs) {
+    collectionDriver.save(_collection(req,res), object, function(err,docs) {
       if (err) { res.send(400, err); }
       else { res.send(201, docs); }
     });
@@ -40,9 +66,8 @@
   exports.update = function(req, res) {
     var params = req.params;
     var entity = params.entity;
-    var collection = params.collection;
     if (entity) {
-      collectionDriver.update(collection, req.body, entity, function(error, objs) { //B
+      collectionDriver.update(_collection(req,res), req.body, entity, function(error, objs) { //B
         if (error) { res.send(400, error); }
         else { res.send(200, objs); }
       });
@@ -55,9 +80,8 @@
   exports.delete = function(req, res) {
     var params = req.params;
     var entity = params.entity;
-    var collection = params.collection;
     if (entity) {
-      collectionDriver.delete(collection, entity, function(error, objs) { //B
+      collectionDriver.delete(_collection(req,res), entity, function(error, objs) { //B
         if (error) { res.send(400, error); }
         else { res.send(200, objs); }
       });
