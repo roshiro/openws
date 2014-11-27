@@ -1,5 +1,6 @@
 (function() {
   var mongo = require('mongodb');
+  var hat   = require('hat');
 
   var _apiKey = function(req) {
     return req.param("apiKey");
@@ -15,7 +16,27 @@
 
   _collection = function(req, res) {
     return _getNamespace(req, res) + "." + req.params.collection;
+  },
+
+  _generateApiKey = function() {
+    return hat();
   };
+
+  exports.createUser = function(req, res) {
+    var user = req.body;
+    console.log("User signup/login request: " + user.email);
+    collectionDriver.find("app.users", { user_id: user.user_id }, function(errors, objs) {
+      if(objs.length > 0) {
+        res.send(200, objs[0]);
+      } else {
+        user["api_key"] = _generateApiKey();
+        collectionDriver.save("app.users", user, function(err, docs) {
+          if (err) { res.send(400, err); }
+          else { res.send(201, docs); }
+        });
+      }
+    });
+  },
 
   exports.findAll = function(req, res) {
     var params = req.params;

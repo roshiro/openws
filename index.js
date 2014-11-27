@@ -26,6 +26,7 @@ app.use(function(req, res, next) {
 });
 
 // Routes and handlers
+app.post('/api/users/new', module.createUser);
 app.get('/', function(request, response) {response.send('Openws is working')});
 app.get('/:collection', module.findAll);
 app.get('/:collection/:entity', module.get);
