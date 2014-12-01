@@ -13,7 +13,8 @@
     "mongoose": "3.x",
     "frisby": "x",
     "jasmine-node": "x",
-    "hat": "x"
+    "hat": "x",
+    "node-promise": "x"
   },
   "engines": {
     "node": "0.10.x"
