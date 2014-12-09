@@ -2,9 +2,9 @@ var http = require('http'),
     express = require('express'),
     module = require('./modules/mongo_crud'),
     app = express(),
-    uri = process.env.MONGOLAB_URI;
+    // uri = process.env.MONGOLAB_URI;
 
-    // uri = "mongodb://localhost:27017/Openws";
+    uri = "mongodb://localhost:27017/Openws";
 
 CollectionDriver = require('./modules/collection_driver').CollectionDriver;
 MongoClient = require('mongodb').MongoClient;
@@ -27,6 +27,7 @@ app.use(function(req, res, next) {
 
 // Routes and handlers
 app.post('/api/users/new', module.createUser);
+app.get('/api/users/collections', module.collections);
 app.get('/', function(request, response) {response.send('Openws is working')});
 app.get('/:collection', module.findAll);
 app.get('/:collection/:entity', module.get);

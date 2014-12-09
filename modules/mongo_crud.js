@@ -1,6 +1,7 @@
 (function() {
   var mongo = require('mongodb');
   var hat   = require('hat');
+  var _ = require("lodash-node");
   var Promise = require('node-promise').Promise;
   var when  = require('node-promise').when;
 
@@ -50,6 +51,31 @@
   _generateApiKey = function() {
     return hat();
   };
+
+  exports.collections = function(req, res) {
+    when(_getNamespace(req, res), function(namespace) {
+      var criteria = {
+        $and:
+        [
+          {name:
+            { $not: new RegExp("\\$_id_") }
+          },
+          {
+            name: new RegExp(namespace)
+          }
+        ]
+      };
+      collectionDriver.find("system.namespaces", criteria, function(errors, objs) {
+        if(errors) throw errors;
+        var collections = _.map(objs, function(elem) {
+          return elem.name
+            .substring(elem.name.indexOf(namespace))
+            .replace(namespace + ".", "");
+        });
+        res.send(200, collections);
+      })
+    });
+  },
 
   exports.createUser = function(req, res) {
     var user = req.body;

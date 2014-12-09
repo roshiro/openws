@@ -14,7 +14,8 @@
     "frisby": "x",
     "jasmine-node": "x",
     "hat": "x",
-    "node-promise": "x"
+    "node-promise": "x",
+    "lodash-node": "x"
   },
   "engines": {
     "node": "0.10.x"
